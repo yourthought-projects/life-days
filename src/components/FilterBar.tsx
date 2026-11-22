@@ -54,26 +54,27 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       </div>
 
       {/* Tabs de Filtro horizontales con scroll en móviles */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-        {tabs.map((tab) => {
-          const activo = filtro === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => onCambiarFiltro(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
-                activo
-                  ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm'
-                  : 'bg-zinc-900/70 text-zinc-400 border border-zinc-800/80 hover:bg-zinc-800/60 hover:text-zinc-200'
-              }`}
-            >
-              {tab.icon}
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
+      <div className="overflow-x-auto no-scrollbar pb-1.5 -mx-4 sm:mx-0 px-4">
+        <div className="flex items-center gap-2 min-w-max">
+          {tabs.map((tab) => {
+            const activo = filtro === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onCambiarFiltro(tab.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all flex-shrink-0 ${
+                  activo
+                    ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm'
+                    : 'bg-zinc-900/70 text-zinc-400 border border-zinc-800/80 hover:bg-zinc-800/60 hover:text-zinc-200'
+                }`}
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 };
-

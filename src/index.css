@@ -14,7 +14,25 @@
   }
 }
 
-/* Scrollbar sutil para modo oscuro */
+/* Soporte para Safe Area en PWA iOS */
+.safe-top {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Ocultar barra de scroll en contenedores horizontales móviles */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Scrollbar sutil para modo oscuro general */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -29,4 +47,3 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
 }
-

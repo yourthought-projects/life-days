@@ -29,53 +29,64 @@ export const Header: React.FC<HeaderProps> = ({
   }).length;
 
   return (
-    <header className="sticky top-0 z-30 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800/80 px-4 py-3 sm:py-4 sm:px-6">
+    <header
+      className="sticky top-0 z-30 bg-zinc-950/85 backdrop-blur-md border-b border-zinc-800/80 px-4 pb-3 sm:pb-4 sm:px-6 safe-top transition-all"
+      style={{ paddingTop: 'max(1rem, env(safe-area-inset-top, 1rem))' }}
+    >
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
-        {/* Marca & Título */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 p-0.5 shadow-lg shadow-amber-500/20">
+        {/* Fila Principal: Logo y Acciones Rápidas */}
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          {/* Marca / Logo */}
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 p-0.5 shadow-lg shadow-amber-500/20 flex-shrink-0">
               <div className="h-full w-full bg-zinc-950 rounded-[10px] flex items-center justify-center">
-                <Flame className="w-5 h-5 text-amber-400" />
+                <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
               </div>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-white whitespace-nowrap">
                   LIFE <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-rose-400">DAYS</span>
                 </h1>
-                <span className="text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
+                <span className="text-[9px] uppercase font-semibold px-1 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">
                   PWA
                 </span>
               </div>
-              <p className="text-xs text-zinc-400">Metas, ritmo de vida y cuenta regresiva</p>
+              <p className="text-[11px] sm:text-xs text-zinc-400 truncate hidden xs:block">
+                Metas, ritmo y cuenta regresiva
+              </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 sm:hidden">
+          {/* Botones Móviles (< 640px): Compactos y Flexibles para evitar desbordes */}
+          <div className="flex items-center gap-1.5 sm:hidden flex-shrink-0">
             {usuario ? (
               <button
                 onClick={onCerrarSesion}
-                className="p-2 text-zinc-400 hover:text-rose-400 rounded-xl hover:bg-zinc-900 border border-zinc-800/80 transition-colors"
-                title="Cerrar sesión"
+                className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-zinc-300 hover:text-rose-400 rounded-xl bg-zinc-900 border border-zinc-800 transition-colors"
+                title={`Cerrar sesión (${usuario.email})`}
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-3.5 h-3.5 text-rose-400" />
+                <span className="text-[11px] font-medium">Salir</span>
               </button>
             ) : (
               <button
                 onClick={onOpenAuthModal}
-                className="p-2 text-zinc-300 hover:text-amber-400 rounded-xl hover:bg-zinc-900 border border-zinc-800/80 transition-colors"
+                className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-zinc-300 hover:text-amber-400 rounded-xl bg-zinc-900 border border-zinc-800 transition-colors"
                 title="Iniciar sesión"
               >
-                <LogIn className="w-4 h-4" />
+                <LogIn className="w-3.5 h-3.5 text-amber-400" />
+                <span className="text-[11px] font-medium">Entrar</span>
               </button>
             )}
+
             <button
               onClick={onOpenCrearModal}
-              className="flex items-center justify-center h-9 w-9 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-lg shadow-rose-500/20 active:scale-95 transition-transform"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 text-white text-xs font-semibold shadow-md shadow-rose-500/20 active:scale-95 transition-transform"
               aria-label="Nueva meta"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-3.5 h-3.5" />
+              <span className="text-[11px] font-medium">Nueva</span>
             </button>
           </div>
         </div>
@@ -105,6 +116,7 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
 
+          {/* Acciones de Escritorio (>= 640px) */}
           <div className="hidden sm:flex items-center gap-3">
             {usuario ? (
               <div className="flex items-center gap-2 pl-2 border-l border-zinc-800">
