@@ -25,7 +25,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   ];
 
   return (
-    <div className="flex flex-col gap-3 py-2">
+    <div className="w-full flex flex-col gap-3 py-2">
       <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         {/* Buscador */}
         <div className="relative flex-1">
@@ -48,13 +48,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
 
         {/* Contador */}
-        <div className="text-xs text-zinc-500 px-1 self-end sm:self-center">
+        <div className="text-xs text-zinc-500 self-end sm:self-center whitespace-nowrap">
           Mostrando <span className="text-zinc-300 font-medium">{totalMetas}</span> {totalMetas === 1 ? 'meta' : 'metas'}
         </div>
       </div>
 
-      {/* Tabs de Filtro horizontales con scroll en móviles */}
-      <div className="overflow-x-auto no-scrollbar pb-1.5 -mx-4 sm:mx-0 px-4">
+      {/* Tabs de Filtro horizontales con scroll en móviles: sin márgenes negativos */}
+      <div className="w-full max-w-full overflow-x-auto no-scrollbar pb-1.5">
         <div className="flex items-center gap-2 min-w-max">
           {tabs.map((tab) => {
             const activo = filtro === tab.id;
@@ -62,7 +62,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               <button
                 key={tab.id}
                 onClick={() => onCambiarFiltro(tab.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all flex-shrink-0 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all shrink-0 ${
                   activo
                     ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-sm'
                     : 'bg-zinc-900/70 text-zinc-400 border border-zinc-800/80 hover:bg-zinc-800/60 hover:text-zinc-200'

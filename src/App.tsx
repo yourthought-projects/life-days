@@ -78,7 +78,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
+    <div className="min-h-screen w-full max-w-5xl mx-auto px-4 overflow-x-hidden bg-zinc-950 text-zinc-100 flex flex-col">
       {/* Banner de Instalación PWA si corresponde */}
       <PwaInstallBanner />
 
@@ -92,7 +92,7 @@ export function App() {
       />
 
       {/* Contenido Principal */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6">
+      <main className="flex-1 w-full mx-auto py-6 overflow-x-hidden">
         
         {/* Barra de Filtros y Búsqueda */}
         <FilterBar
@@ -104,7 +104,7 @@ export function App() {
         />
 
         {/* Dashboard Grid */}
-        <div className="mt-6">
+        <div className="mt-6 w-full">
           {cargando ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
