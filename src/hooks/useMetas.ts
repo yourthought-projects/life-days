@@ -2,13 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { Meta, FiltroEstado } from '../types/meta';
 import { metaService } from '../services/storageService';
 import { calcularDiasRestantes, calcularPorcentajeAvance } from '../utils/date';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import confetti from 'canvas-confetti';
+import { User } from '@supabase/supabase-js';
 
 export function useMetas() {
   const [metas, setMetas] = useState<Meta[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
   const [filtro, setFiltro] = useState<FiltroEstado>('todas');
   const [busqueda, setBusqueda] = useState<string>('');
+  const [usuario, setUsuario] = useState<User | null>(null);
 
   const cargarMetas = useCallback(async () => {
     try {
@@ -22,9 +25,35 @@ export function useMetas() {
     }
   }, []);
 
+  // Escuchar sesión y cambios de autenticación
   useEffect(() => {
-    cargarMetas();
+    if (!isSupabaseConfigured) {
+      cargarMetas();
+      return;
+    }
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUsuario(session?.user ?? null);
+      cargarMetas();
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUsuario(session?.user ?? null);
+      cargarMetas();
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [cargarMetas]);
+
+  const cerrarSesion = async () => {
+    if (isSupabaseConfigured) {
+      await supabase.auth.signOut();
+      setUsuario(null);
+      await cargarMetas();
+    }
+  };
 
   const dispararConfeti = () => {
     confetti({
@@ -70,7 +99,6 @@ export function useMetas() {
     }
 
     if (meta.tipo === 'hitos') {
-      // Encontrar el primer hito incompleto
       const indexPrimerIncompleto = meta.hitos.findIndex(h => !h.completado);
       if (indexPrimerIncompleto !== -1) {
         const nuevosHitos = [...meta.hitos];
@@ -107,7 +135,6 @@ export function useMetas() {
       return pct >= 100;
     }
     if (filtro === 'proximas') {
-      // Próximas a vencer: no completadas y faltan 14 días o menos (o vencidas)
       return pct < 100 && dias <= 14;
     }
     return true;
@@ -121,6 +148,8 @@ export function useMetas() {
     setFiltro,
     busqueda,
     setBusqueda,
+    usuario,
+    cerrarSesion,
     crearMeta,
     editarMeta,
     eliminarMeta,
@@ -128,4 +157,3 @@ export function useMetas() {
     recargar: cargarMetas
   };
 }
-

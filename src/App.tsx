@@ -7,6 +7,7 @@ import { MetaModal } from './components/MetaModal';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { EmptyState } from './components/EmptyState';
 import { PwaInstallBanner } from './components/PwaInstallBanner';
+import { AuthModal } from './components/AuthModal';
 import { Meta } from './types/meta';
 
 export function App() {
@@ -18,13 +19,17 @@ export function App() {
     setFiltro,
     busqueda,
     setBusqueda,
+    usuario,
+    cerrarSesion,
     crearMeta,
     editarMeta,
     eliminarMeta,
-    avanzarEnUnToque
+    avanzarEnUnToque,
+    recargar
   } = useMetas();
 
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [authModalAbierto, setAuthModalAbierto] = useState(false);
   const [metaParaEditar, setMetaParaEditar] = useState<Meta | null>(null);
   const [metaParaEliminar, setMetaParaEliminar] = useState<Meta | null>(null);
 
@@ -78,7 +83,13 @@ export function App() {
       <PwaInstallBanner />
 
       {/* Header Fijo / Sticky */}
-      <Header metas={metas} onOpenCrearModal={handleAbrirCrear} />
+      <Header
+        metas={metas}
+        usuario={usuario}
+        onOpenCrearModal={handleAbrirCrear}
+        onOpenAuthModal={() => setAuthModalAbierto(true)}
+        onCerrarSesion={cerrarSesion}
+      />
 
       {/* Contenido Principal */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 py-6 sm:px-6">
@@ -155,9 +166,15 @@ export function App() {
         onConfirmar={handleConfirmarEliminar}
         tituloMeta={metaParaEliminar?.titulo || ''}
       />
+
+      {/* Modal Autenticación Supabase */}
+      <AuthModal
+        abierto={authModalAbierto}
+        onCerrar={() => setAuthModalAbierto(false)}
+        onExito={() => recargar()}
+      />
     </div>
   );
 }
 
 export default App;
-
